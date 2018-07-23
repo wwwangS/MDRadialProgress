@@ -223,8 +223,9 @@
     BOOL cgClockwise = !self.clockwise;
     NSUInteger startingSlice = self.startingSlice -1;
     
-    CGFloat start = 0.7 * M_PI;
-    CGFloat end = 2.3 * M_PI;
+    
+    CGFloat start = 0.7 ;
+    CGFloat end = 2.3 ;
     
     // If there's no progress, just draw the incomplete arc.
     if (self.progressCounter == 0 && self.theme.drawIncompleteArcIfNoProgress) {
@@ -286,25 +287,23 @@
         // Draw the arcs grouped instead of individually to avoid
         // artifacts between one slice and another.
         
-        CGFloat count = (CGFloat)((CGFloat)self.progressCounter/(CGFloat)self.progressTotal);
-        
         [self drawArcInContext:context
                         center:center
                         radius:circleRadius
-                    startAngle:start
-                      endAngle:end
+                    startAngle:start * M_PI
+                      endAngle:end * M_PI
                          color:self.theme.incompletedColor.CGColor
                      clockwise:cgClockwise];
         
+        CGFloat count = ((end - start) * ((CGFloat)self.progressCounter/(CGFloat)self.progressTotal));
         // Completed slices.
         [self drawArcInContext:context
                         center:center
                         radius:circleRadius
-                    startAngle:start
-                      endAngle:(1 + count) * M_PI
+                    startAngle:start * M_PI
+                      endAngle:(count + start) * M_PI
                          color:self.theme.completedColor.CGColor
                      clockwise:cgClockwise];
-
     }
 }
 
